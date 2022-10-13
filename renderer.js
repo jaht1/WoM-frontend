@@ -6,8 +6,54 @@
  * to expose Node.js functionality from the main process.
  */
 
- (async() => {
-    console.log(await window.exposed.getStuffFromMain())
+ getCabins = async () => {
+    console.log('getCabins')
+    const cabins = await window.electron.getCabins()
+    console.log(cabins)
 
-    await window.exposed.sendStuffToMain('Stuff from renderer')
-})()
+    if (!cabins) {
+        document.querySelector('#login').style.display = 'block'
+        return
+    }
+
+    let cabinsHTML = "";
+    for (const cabin of cabins) {
+        cabinsHTML += `
+            <div class="cabin">
+                ${cabin.text}
+                <input class="btn-del" data-id="${cabin._id}" type="button" value="del">
+            </div>
+        `;
+    }
+
+    document.querySelector('#cabins').innerHTML = cabinsHTML;
+
+}
+getCabins()
+
+document.querySelector('#btn-login').addEventListener('click', async () => {
+    document.querySelector('#msg').innerText = ''
+    
+    //cabinsLogin --> preload.js
+    const login_failed = await window.electron.cabinsLogin({
+        email: document.querySelector('#email').value,
+        password: document.querySelector('#password').value
+    })
+    if (login_failed) {
+
+        document.querySelector('#msg').innerText = login_failed.msg
+        return 
+    }
+
+    document.querySelector('#login').style.display = 'none'
+    getCabins()
+})
+
+document.querySelector('#cabins').addEventListener('click', async (event) => {
+    console.log(event.target)
+    if (event.target.classList.contains('btn-del')) {
+        console.log(event.target.getAttribute('data-id'))
+        await window.electron.delCabin(event.target.getAttribute('data-id'))
+
+    }
+})
