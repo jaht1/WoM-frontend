@@ -1,5 +1,8 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, ipcMain} = require('electron')
+
+//BACKEND
+
+const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
 const fetch = require('electron-fetch').default
 
@@ -10,10 +13,11 @@ const store = new Store()
 
 
 const cabinsAPI = process.env.cabinsAPI
+const serviceAPI = process.env.serviceAPI
 
 console.log(cabinsAPI)
 
-function createWindow () {
+function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
@@ -41,13 +45,14 @@ app.whenReady().then(() => {
   // Check original template for MacOS stuff!
 })
 
-// Example functions for communication between main and renderer (backend/frontend)
+//get/cabins
 ipcMain.handle('get-cabins', async () => {
   console.log('get-cabins (main)')
   try {
-    const resp = await fetch(cabinsAPI + '/cabins', {
-      headers: { 'Authorization': 'Bearer ' + store.get('jwt') },
-      timeout: 2000
+    const resp = await fetch(serviceAPI + '/orders', {
+      method: 'GET',
+      headers: { 'Authorization': 'Bearer ' + store.get('jwt') }//,
+     // timeout: 2000
     })
     const cabins = await resp.json()
     if (resp.status > 201) {
@@ -64,7 +69,8 @@ ipcMain.handle('get-cabins', async () => {
 
 })
 
-//LOGIN
+//LOGIN STEP 3
+//
 ipcMain.handle('cabins-login', async (event, data) => {
   console.log('cabins-login (main)')
   try {
@@ -72,24 +78,27 @@ ipcMain.handle('cabins-login', async (event, data) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)//,
-     // timeout: 3000
+      // timeout: 3000
     })
     const user = await resp.json()
     console.log(user)
 
+    //Login failed
+    //Returnar REST error message
+    //user == error msg
     if (resp.status > 201) return user
 
-
+    //Login success
     //JWT-Token
     store.set('jwt', user.token)
     return false // false = login succeeded
 
 
-  } 
-  //LOGIN FAILED
+  }
+  //Login failed
   catch (error) {
     console.log(error.message)
-    return { 'msg': "Login failed."}
+    return { 'msg': "Login failed." }
   }
 
 })

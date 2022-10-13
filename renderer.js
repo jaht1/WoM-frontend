@@ -6,11 +6,18 @@
  * to expose Node.js functionality from the main process.
  */
 
+
+//FRONTEND
+
+
+
  getCabins = async () => {
     console.log('getCabins')
     const cabins = await window.electron.getCabins()
     console.log(cabins)
 
+
+    //Om apit inte returnerar cabins
     if (!cabins) {
         document.querySelector('#login').style.display = 'block'
         return
@@ -20,7 +27,7 @@
     for (const cabin of cabins) {
         cabinsHTML += `
             <div class="cabin">
-                ${cabin.text}
+                ${cabin.address}
                 <input class="btn-del" data-id="${cabin._id}" type="button" value="del">
             </div>
         `;
@@ -31,9 +38,13 @@
 }
 getCabins()
 
+
+
+//LOGIN STEP 1 
+//Button click -> preload function cabinsLogin
 document.querySelector('#btn-login').addEventListener('click', async () => {
     document.querySelector('#msg').innerText = ''
-    
+
     //cabinsLogin --> preload.js
     const login_failed = await window.electron.cabinsLogin({
         email: document.querySelector('#email').value,
