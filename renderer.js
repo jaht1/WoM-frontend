@@ -23,16 +23,18 @@ getCabins = async () => {
         return
     }
 
-    let cabinsHTML = "<h2>Dina stugor</h2>";
+    let cabinsHTML = "<h2>Dina stugor</h2> <br> <table id='table' border='1px'>";
     for (const cabin of cabins) {
         cabinsHTML += `
             <div class="cabin">
-                ${cabin.address}
-                <input class="btn-del" data-id="${cabin._id}" type="button" value="del">
+            <tr bgcolor='#eaece5'">
+                <td> ${cabin.address} </td>
+                <td> <input class="btn-del" data-id="${cabin._id}" type="button" value="Delete"></td>
+                </tr>
             </div>
         `;
     }
-
+    
 
 
     document.querySelector('#cabins').innerHTML = cabinsHTML;
@@ -55,15 +57,18 @@ getServices = async () => {
           return
       }*/
 
-    let servicesHTML = "<h2>Tjänster</h2>";
+    let servicesHTML = "<h2>Tjänster</h2> <br> <table id='table' border='1px';>";
     for (const service of services) {
         servicesHTML += `
             <div class="service">
-                ${service.name}
-                <input class="btn-del" data-id="${service._id}" type="button" value="del">
+            <tr bgcolor='#eaece5'">
+               <td> ${service.name} </td>
+                <td> <input class="btn-del" data-id="${service._id}" type="button" value="Delete"> </td>
+                </tr>
             </div>
         `;
     }
+   
 
 
 
@@ -85,11 +90,11 @@ getOrders = async () => {
           return
       }*/
 
-    let ordersHTML = "<h2>Beställda tjänster</h2> <br> <table border='1px'>";
+    let ordersHTML = "<h2>Beställda tjänster</h2> <br> <table id='table' border='1px'>";
     for (const order of orders) {
         ordersHTML += `
             <div class="order">
-            <tr>
+            <tr bgcolor='#eaece5'">
              <td>   ${order.date} </td>
              <td>${order.name}  </td>
             </tr>
