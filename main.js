@@ -48,13 +48,25 @@ app.whenReady().then(() => {
 //get/cabins
 ipcMain.handle('get-cabins', async () => {
   console.log('get-cabins (main)')
+
+
   try {
-    const resp = await fetch(serviceAPI + '/orders', {
-      method: 'GET',
-      headers: { 'Authorization': 'Bearer ' + store.get('jwt') }//,
-     // timeout: 2000
-    })
+    /* const resp = await fetch(serviceAPI + '/cabins', {
+       method: 'GET',
+       headers: {
+         'Content-Type': 'application/json',
+         'Authorization': 'Bearer ' + store.get('jwt')
+       }//,
+       // timeout: 2000
+     })*/
+    fetch(serviceAPI + '/cabins')
+      .then(res => res.text())          // convert to plain text
+      .then(text => console.log(text))
+
+    // console.log(store.get('jwt'))
     const cabins = await resp.json()
+    //console.log("cabins:" + cabins)
+
     if (resp.status > 201) {
       console.log(cabins)
       return false
@@ -63,7 +75,7 @@ ipcMain.handle('get-cabins', async () => {
     return cabins
 
   } catch (error) {
-    console.log(error.message)
+    console.log("Error: " + error.message)
     return false
   }
 
