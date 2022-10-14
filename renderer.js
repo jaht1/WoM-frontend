@@ -38,6 +38,7 @@
     document.querySelector('#cabins').innerHTML = cabinsHTML;
 
     getServices()
+    getOrders()
 
 }
 getCabins()
@@ -67,6 +68,36 @@ getServices = async () => {
     
 
     document.querySelector('#services').innerHTML = servicesHTML;
+    
+
+
+}
+
+getOrders = async () => {
+    console.log('getOrders')
+    const orders = await window.electron.getOrders()
+    console.log(orders)
+
+
+    //Om apit inte returnerar services
+  /*  if (!services) {
+        document.querySelector('#login').style.display = 'block'
+        return
+    }*/
+
+    let ordersHTML = "";
+    for (const order of orders) {
+        ordersHTML += `
+            <div class="order">
+                ${order.name}
+                <input class="btn-del" data-id="${order._id}" type="button" value="del">
+            </div>
+        `;
+    }
+
+    
+
+    document.querySelector('#services').innerHTML = ordersHTML;
 
 
 }

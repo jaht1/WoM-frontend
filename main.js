@@ -113,6 +113,37 @@ ipcMain.handle('get-services', async () => {
 
 })
 
+
+//ORDERS
+ipcMain.handle('get-orders', async () => {
+  console.log('get-services (main)')
+
+
+  try {
+     const resp = await fetch(serviceAPI + '/orders', {
+       method: 'GET',
+       headers: {
+         'Content-Type': 'application/json',
+         //'Authorization': 'Bearer ' + store.get('jwt')
+       }//,
+       // timeout: 2000
+     })
+   
+    const orders = await resp.json()
+
+    if (resp.status > 201) {
+      console.log(orders)
+      return false
+    }
+
+    return orders
+
+  } catch (error) {
+    console.log("Error: " + error.message)
+    return false
+  }
+
+})
 //LOGIN STEP 3
 //
 ipcMain.handle('cabins-login', async (event, data) => {
