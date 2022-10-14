@@ -16,7 +16,6 @@
   "bugs": {
     "url": "https://github.com/jaht1/WoM-frontend/issues"
   },
-  
   "dependencies": {
     "bcrypt": "^5.1.0",
     "dotenv": "^16.0.3",
