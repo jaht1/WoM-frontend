@@ -51,17 +51,17 @@ ipcMain.handle('get-cabins', async () => {
 
 
   try {
-    /* const resp = await fetch(serviceAPI + '/cabins', {
+     const resp = await fetch(cabinsAPI + '/cabins/owned', {
        method: 'GET',
        headers: {
          'Content-Type': 'application/json',
          'Authorization': 'Bearer ' + store.get('jwt')
        }//,
        // timeout: 2000
-     })*/
-    fetch(serviceAPI + '/cabins')
+     })
+   /* fetch(cabinsAPI + '/cabins/owned')
       .then(res => res.text())          // convert to plain text
-      .then(text => console.log(text))
+      .then(text => console.log(text))*/
 
     // console.log(store.get('jwt'))
     const cabins = await resp.json()
@@ -73,6 +73,38 @@ ipcMain.handle('get-cabins', async () => {
     }
 
     return cabins
+
+  } catch (error) {
+    console.log("Error: " + error.message)
+    return false
+  }
+
+})
+
+//Get-services
+
+ipcMain.handle('get-services', async () => {
+  console.log('get-services (main)')
+
+
+  try {
+     const resp = await fetch(serviceAPI + '/services', {
+       method: 'GET',
+       headers: {
+         'Content-Type': 'application/json',
+         //'Authorization': 'Bearer ' + store.get('jwt')
+       }//,
+       // timeout: 2000
+     })
+   
+    const services = await resp.json()
+
+    if (resp.status > 201) {
+      console.log(services)
+      return false
+    }
+
+    return services
 
   } catch (error) {
     console.log("Error: " + error.message)

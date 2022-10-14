@@ -10,6 +10,7 @@
  
    getCabins: () => ipcRenderer.invoke('get-cabins'),
  
+   getServices: () => ipcRenderer.invoke('get-services'),
    //LOGIN STEP 2
    //cabins-login --> main.js
    cabinsLogin: (data) => ipcRenderer.invoke('cabins-login', data),

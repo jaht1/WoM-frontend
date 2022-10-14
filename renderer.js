@@ -33,13 +33,43 @@
         `;
     }
 
+    
+
     document.querySelector('#cabins').innerHTML = cabinsHTML;
+
+    getServices()
 
 }
 getCabins()
 
+getServices = async () => {
+    console.log('getServices')
+    const services = await window.electron.getServices()
+    console.log(services)
 
 
+    //Om apit inte returnerar services
+  /*  if (!services) {
+        document.querySelector('#login').style.display = 'block'
+        return
+    }*/
+
+    let servicesHTML = "";
+    for (const service of services) {
+        servicesHTML += `
+            <div class="service">
+                ${service.name}
+                <input class="btn-del" data-id="${service._id}" type="button" value="del">
+            </div>
+        `;
+    }
+
+    
+
+    document.querySelector('#services').innerHTML = servicesHTML;
+
+
+}
 //LOGIN STEP 1 
 //Button click -> preload function cabinsLogin
 document.querySelector('#btn-login').addEventListener('click', async () => {
@@ -68,3 +98,8 @@ document.querySelector('#cabins').addEventListener('click', async (event) => {
 
     }
 })
+
+/*delCabin = async () => ({
+
+
+})*/
