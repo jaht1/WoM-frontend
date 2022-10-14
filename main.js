@@ -116,7 +116,7 @@ ipcMain.handle('get-services', async () => {
 
 //ORDERS
 ipcMain.handle('get-orders', async () => {
-  console.log('get-services (main)')
+  console.log('get-orders (main)')
 
 
   try {

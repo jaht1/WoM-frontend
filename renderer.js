@@ -11,7 +11,7 @@
 
 
 
- getCabins = async () => {
+getCabins = async () => {
     console.log('getCabins')
     const cabins = await window.electron.getCabins()
     console.log(cabins)
@@ -23,7 +23,7 @@
         return
     }
 
-    let cabinsHTML = "";
+    let cabinsHTML = "<h2>Dina stugor</h2>";
     for (const cabin of cabins) {
         cabinsHTML += `
             <div class="cabin">
@@ -33,7 +33,7 @@
         `;
     }
 
-    
+
 
     document.querySelector('#cabins').innerHTML = cabinsHTML;
 
@@ -50,12 +50,12 @@ getServices = async () => {
 
 
     //Om apit inte returnerar services
-  /*  if (!services) {
-        document.querySelector('#login').style.display = 'block'
-        return
-    }*/
+    /*  if (!services) {
+          document.querySelector('#login').style.display = 'block'
+          return
+      }*/
 
-    let servicesHTML = "";
+    let servicesHTML = "<h2>Tjänster</h2>";
     for (const service of services) {
         servicesHTML += `
             <div class="service">
@@ -65,10 +65,10 @@ getServices = async () => {
         `;
     }
 
-    
+
 
     document.querySelector('#services').innerHTML = servicesHTML;
-    
+
 
 
 }
@@ -80,24 +80,27 @@ getOrders = async () => {
 
 
     //Om apit inte returnerar services
-  /*  if (!services) {
-        document.querySelector('#login').style.display = 'block'
-        return
-    }*/
+    /*  if (!services) {
+          document.querySelector('#login').style.display = 'block'
+          return
+      }*/
 
-    let ordersHTML = "";
+    let ordersHTML = "<h2>Beställda tjänster</h2> <br> <table border='1px'>";
     for (const order of orders) {
         ordersHTML += `
             <div class="order">
-                ${order.name}
-                <input class="btn-del" data-id="${order._id}" type="button" value="del">
+            <tr>
+             <td>   ${order.date} </td>
+             <td>${order.name}  </td>
+            </tr>
+                
             </div>
         `;
     }
 
-    
 
-    document.querySelector('#services').innerHTML = ordersHTML;
+
+    document.querySelector('#orders').innerHTML = ordersHTML + "</table>";
 
 
 }
@@ -114,7 +117,7 @@ document.querySelector('#btn-login').addEventListener('click', async () => {
     if (login_failed) {
 
         document.querySelector('#msg').innerText = login_failed.msg
-        return 
+        return
     }
 
     document.querySelector('#login').style.display = 'none'
