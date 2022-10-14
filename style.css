@@ -1,10 +1,41 @@
+*{margin: 0; padding: 0}
 body {
   background-color: #b2c2bf;
   text-align: center;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding-top: 10vh;
 }
 
 #login {
   border:1px solid black;
   background-color: #eaece5;
+  width: 250px;
+  height: auto;
+  padding: 20px 30px;
+  box-shadow: 0 0 10px 0;
+  margin: auto;
+}
+
+ul.list {
+  list-style: none;
+  text-align: center;
+}
+
+ul.list li {
+  width: 250px;
+  margin-bottom: 10px;
+  
+}
+
+ul.list li input {
+  width: 250px;
+  text-align: center;
+  padding: 8px 0px;
+  border: none;
+  background-color: #f3f3f3;
+  border-radius: 5px;
+  border: 1px solid darkgray;
+}
+#btn-login {
+  background-color: #b2c2bf;  
 }
