@@ -16,9 +16,9 @@
    //cabins-login --> main.js
    cabinsLogin: (data) => ipcRenderer.invoke('cabins-login', data),
  
-  // saveNote: (data) => ipcRenderer.invoke('save-note', data),
  
-    delOrder: (data) => ipcRenderer.invoke('del-order', data)
+    delOrder: (data) => ipcRenderer.invoke('del-order', data),
+    editOrder: (data) => ipcRenderer.invoke('edit-order', data)
  
  
  })

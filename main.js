@@ -20,8 +20,8 @@ console.log(cabinsAPI)
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1000,
+    height: 800,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     },
@@ -56,16 +56,10 @@ ipcMain.handle('get-cabins', async () => {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + store.get('jwt')
-      }//,
-      // timeout: 2000
+      }
     })
-    /* fetch(cabinsAPI + '/cabins/owned')
-       .then(res => res.text())          // convert to plain text
-       .then(text => console.log(text))*/
 
-    // console.log(store.get('jwt'))
     const cabins = await resp.json()
-    //console.log("cabins:" + cabins)
 
     if (resp.status > 201) {
       console.log(cabins)
@@ -91,10 +85,8 @@ ipcMain.handle('get-services', async () => {
     const resp = await fetch(serviceAPI + '/services', {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
-        //'Authorization': 'Bearer ' + store.get('jwt')
-      }//,
-      // timeout: 2000
+        'Content-Type': 'application/json'
+      }
     })
 
     const services = await resp.json()
@@ -124,9 +116,7 @@ ipcMain.handle('get-orders', async () => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        //'Authorization': 'Bearer ' + store.get('jwt')
-      }//,
-      // timeout: 2000
+      }
     })
 
     const orders = await resp.json()
@@ -177,7 +167,6 @@ ipcMain.handle('cabins-login', async (event, data) => {
   }
 
 })
-//ipcMain.handle('save-cabin', async (event, data) => console.log(data))
 
 //Radera order
 ipcMain.handle('del-order', async (event, data) => {
@@ -186,12 +175,7 @@ ipcMain.handle('del-order', async (event, data) => {
   try {
     const resp = await fetch(serviceAPI + '/orders/' + data, {
       //_id: data
-      method: 'DELETE',
-      //  headers: {
-      //    'Content-Type': 'application/json',
-      //'Authorization': 'Bearer ' + store.get('jwt')
-      //  }//,
-      // timeout: 2000
+      method: 'DELETE'
     })
     console.log("Booking deleted")
 
@@ -203,6 +187,34 @@ ipcMain.handle('del-order', async (event, data) => {
 
 })
 
+ipcMain.handle('edit-order', async (event, data, date) => {
+  console.log("Send edit request to API: /orders/" + data)
+
+  try {
+    //const data = { date: date };
+    const resp = await fetch(serviceAPI + '/orders/' + data, {
+      _id: data,
+      method: 'PATCH',
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(date),
+      
+    })
+    const order = await resp.json()
+    console.log(order)
+    console.log("order date " + date)
+
+    return(order.msg)
+
+
+  }
+  catch (error) {
+    console.log("Error: " + error.message)
+  }
+
+
+})
 
 
 app.on('window-all-closed', function () {

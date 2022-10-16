@@ -20,6 +20,7 @@ getCabins = async () => {
     //Om apit inte returnerar cabins
     if (!cabins) {
         document.querySelector('#login').style.display = 'block'
+        
         return
     }
 
@@ -50,11 +51,6 @@ getServices = async () => {
     console.log(services)
 
 
-    //Om apit inte returnerar services
-    /*  if (!services) {
-          document.querySelector('#login').style.display = 'block'
-          return
-      }*/
 
     let servicesHTML = "<h2>Tjänster</h2> <br> <table id='table' border='1px';>";
     for (const service of services) {
@@ -84,13 +80,8 @@ getOrders = async () => {
     console.log(orders)
 
 
-    //Om apit inte returnerar services
-    /*  if (!services) {
-          document.querySelector('#login').style.display = 'block'
-          return
-      }*/
 
-    let ordersHTML = "<h2>Beställda tjänster</h2> <br> <table id='table' border='1px'>";
+    let ordersHTML = "<h2>Beställda tjänster</h2> <br> <table id='table' border='1px'> ";
 
     for (const order of orders) {
         var date = new Date(order.date);
@@ -99,12 +90,14 @@ getOrders = async () => {
         ordersHTML += `
             <div class="order">
             <tr bgcolor='#eaece5'">
-             <td>   ${date.toLocaleDateString('en-FI')} </td>
-             <td>${order.name}  </td>
+             <td id='date'>   ${date.toLocaleDateString('en-FI')} </td>
+             <td id='name'>${order.name}  </td>
              <td> <input class="btn-del" data-id="${order._id}" type="button" value="Delete"> </td>
+             <td> <input class="btn-edit" data-id="${order._id}" name="${order.name}" date="${order.date}"type="button" value="Edit"> </td>
             </tr>
                 
             </div>
+            <div id='date'></div>
         `;
         //  }
 
@@ -136,33 +129,45 @@ document.querySelector('#btn-login').addEventListener('click', async () => {
     getCabins()
 })
 
-//window.localStorage.setItem('show_div', '');
+
 document.querySelector('#orders').addEventListener('click', async (event) => {
     console.log(event.target)
     if (event.target.classList.contains('btn-del')) {
         console.log(event.target.getAttribute('data-id'))
         await window.electron.delOrder(event.target.getAttribute('data-id'))
         console.log("TEST")
+
         sessionStorage.reloadAfterPageLoad = true;
-        window.location.reload();
-        // window.localStorage.setItem('show_div', '');
-        /*.then(result => {
-            window.localStorage.setItem('show_div', 'true');
-            window.location.reload();
-            // window.localStorage.setItem('show_div', 'true');
-          })
-          //document.querySelector('#show_div').innerText = "Order deleted"
-          
-          
-          if (window.localStorage.getItem('show_div') == 'true') {
-            console.log("funkar")
-            document.querySelector('#del-msg').innerText = "Order deleted";
-          } else {
-            console.log("Läser funktion false")
-            document.querySelector('#del-msg').innerText = "";
-          
-          }*/
-          
+        window.location.reload()
+
+    }
+
+    if (event.target.classList.contains('btn-edit')) {
+        var date = new Date();
+        console.log('date clicked. id = ' + event.target.getAttribute('data-id'))
+
+        dateInput = "<form class='date_picker'>Välj ett nytt datum för tjänsten " + event.target.getAttribute('name') + " <br><input type='date' name='new_date' value=" + date.toISOString().split('T')[0] + "><input type='submit' value='skicka' id='edit_date'></form><br>"
+        document.getElementById('date').innerHTML = dateInput
+        let form = document.querySelector(".date_picker");
+
+        form.addEventListener("submit", async function (e) {
+            e.preventDefault() // This prevents the window from reloading
+
+            let formdata = new FormData(this);
+            let input = formdata.get("new_date");
+
+           // alert(input);
+            
+           var msg = await window.electron.editOrder(event.target.getAttribute('data-id'), {
+                date: input
+            })
+            document.querySelector('#del-msg').innerText = msg
+            document.getElementById('date').innerHTML = ""
+            setTimeout(function () { document.querySelector('#del-msg').innerText = "" }, 5000)
+            
+
+        })
+
 
     }
 })
@@ -171,12 +176,10 @@ document.querySelector('#orders').addEventListener('click', async (event) => {
 if (sessionStorage.reloadAfterPageLoad) {
 
     document.querySelector('#del-msg').innerText = "ORDER DELETED"
-    setTimeout(function(){document.querySelector('#del-msg').innerText = ""}, 5000);
-    
-    
-
+    setTimeout(function () { document.querySelector('#del-msg').innerText = "" }, 5000)
 
 }
+
 
 
 /*delCabin = async () => ({
