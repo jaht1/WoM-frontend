@@ -20,11 +20,11 @@ getCabins = async () => {
     //Om apit inte returnerar cabins
     if (!cabins) {
         document.querySelector('#login').style.display = 'block'
-        
+
         return
     }
 
-    let cabinsHTML = "<h2>Dina stugor</h2> <br> <table id='table' border='1px'>";
+    let cabinsHTML = "<h2>Dina stugor</h2> <br> <table id='table'>";
     for (const cabin of cabins) {
         cabinsHTML += `
             <div class="cabin">
@@ -52,7 +52,7 @@ getServices = async () => {
 
 
 
-    let servicesHTML = "<h2>Tjänster</h2> <br> <table id='table' border='1px';>";
+    let servicesHTML = "<h2>Tjänster</h2> <br> <table id='table'';>";
     for (const service of services) {
         servicesHTML += `
             <div class="service">
@@ -81,7 +81,7 @@ getOrders = async () => {
 
 
 
-    let ordersHTML = "<h2>Beställda tjänster</h2> <br> <table id='table' border='1px'> ";
+    let ordersHTML = "<h2>Beställda tjänster</h2> <br> <table id='table'> ";
 
     for (const order of orders) {
         var date = new Date(order.date);
