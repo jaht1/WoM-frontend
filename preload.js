@@ -18,7 +18,7 @@
  
   // saveNote: (data) => ipcRenderer.invoke('save-note', data),
  
-  // delNote: (data) => ipcRenderer.invoke('del-note', data)
+    delOrder: (data) => ipcRenderer.invoke('del-order', data)
  
  
  })

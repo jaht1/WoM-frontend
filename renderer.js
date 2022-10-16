@@ -29,12 +29,11 @@ getCabins = async () => {
             <div class="cabin">
             <tr bgcolor='#eaece5'">
                 <td> ${cabin.address} </td>
-                <td> <input class="btn-del" data-id="${cabin._id}" type="button" value="Delete"></td>
                 </tr>
             </div>
         `;
     }
-    
+
 
 
     document.querySelector('#cabins').innerHTML = cabinsHTML;
@@ -63,12 +62,12 @@ getServices = async () => {
             <div class="service">
             <tr bgcolor='#eaece5'">
                <td> ${service.name} </td>
-                <td> <input class="btn-del" data-id="${service._id}" type="button" value="Delete"> </td>
+                
                 </tr>
             </div>
         `;
     }
-   
+
 
 
 
@@ -81,6 +80,7 @@ getServices = async () => {
 getOrders = async () => {
     console.log('getOrders')
     const orders = await window.electron.getOrders()
+    const services = await window.electron.getServices()
     console.log(orders)
 
 
@@ -91,16 +91,23 @@ getOrders = async () => {
       }*/
 
     let ordersHTML = "<h2>Beställda tjänster</h2> <br> <table id='table' border='1px'>";
+
     for (const order of orders) {
+        var date = new Date(order.date);
+
+        // for (service of services) {
         ordersHTML += `
             <div class="order">
             <tr bgcolor='#eaece5'">
-             <td>   ${order.date} </td>
+             <td>   ${date.toLocaleDateString('en-FI')} </td>
              <td>${order.name}  </td>
+             <td> <input class="btn-del" data-id="${order._id}" type="button" value="Delete"> </td>
             </tr>
                 
             </div>
         `;
+        //  }
+
     }
 
 
@@ -129,14 +136,48 @@ document.querySelector('#btn-login').addEventListener('click', async () => {
     getCabins()
 })
 
-document.querySelector('#cabins').addEventListener('click', async (event) => {
+//window.localStorage.setItem('show_div', '');
+document.querySelector('#orders').addEventListener('click', async (event) => {
     console.log(event.target)
     if (event.target.classList.contains('btn-del')) {
         console.log(event.target.getAttribute('data-id'))
-        await window.electron.delCabin(event.target.getAttribute('data-id'))
+        await window.electron.delOrder(event.target.getAttribute('data-id'))
+        console.log("TEST")
+        sessionStorage.reloadAfterPageLoad = true;
+        window.location.reload();
+        // window.localStorage.setItem('show_div', '');
+        /*.then(result => {
+            window.localStorage.setItem('show_div', 'true');
+            window.location.reload();
+            // window.localStorage.setItem('show_div', 'true');
+          })
+          //document.querySelector('#show_div').innerText = "Order deleted"
+          
+          
+          if (window.localStorage.getItem('show_div') == 'true') {
+            console.log("funkar")
+            document.querySelector('#del-msg').innerText = "Order deleted";
+          } else {
+            console.log("Läser funktion false")
+            document.querySelector('#del-msg').innerText = "";
+          
+          }*/
+          
 
     }
 })
+
+
+if (sessionStorage.reloadAfterPageLoad) {
+
+    document.querySelector('#del-msg').innerText = "ORDER DELETED"
+    setTimeout(function(){document.querySelector('#del-msg').innerText = ""}, 5000);
+    
+    
+
+
+}
+
 
 /*delCabin = async () => ({
 

@@ -51,17 +51,17 @@ ipcMain.handle('get-cabins', async () => {
 
 
   try {
-     const resp = await fetch(cabinsAPI + '/cabins/owned', {
-       method: 'GET',
-       headers: {
-         'Content-Type': 'application/json',
-         'Authorization': 'Bearer ' + store.get('jwt')
-       }//,
-       // timeout: 2000
-     })
-   /* fetch(cabinsAPI + '/cabins/owned')
-      .then(res => res.text())          // convert to plain text
-      .then(text => console.log(text))*/
+    const resp = await fetch(cabinsAPI + '/cabins/owned', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + store.get('jwt')
+      }//,
+      // timeout: 2000
+    })
+    /* fetch(cabinsAPI + '/cabins/owned')
+       .then(res => res.text())          // convert to plain text
+       .then(text => console.log(text))*/
 
     // console.log(store.get('jwt'))
     const cabins = await resp.json()
@@ -88,15 +88,15 @@ ipcMain.handle('get-services', async () => {
 
 
   try {
-     const resp = await fetch(serviceAPI + '/services', {
-       method: 'GET',
-       headers: {
-         'Content-Type': 'application/json',
-         //'Authorization': 'Bearer ' + store.get('jwt')
-       }//,
-       // timeout: 2000
-     })
-   
+    const resp = await fetch(serviceAPI + '/services', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        //'Authorization': 'Bearer ' + store.get('jwt')
+      }//,
+      // timeout: 2000
+    })
+
     const services = await resp.json()
 
     if (resp.status > 201) {
@@ -120,15 +120,15 @@ ipcMain.handle('get-orders', async () => {
 
 
   try {
-     const resp = await fetch(serviceAPI + '/orders', {
-       method: 'GET',
-       headers: {
-         'Content-Type': 'application/json',
-         //'Authorization': 'Bearer ' + store.get('jwt')
-       }//,
-       // timeout: 2000
-     })
-   
+    const resp = await fetch(serviceAPI + '/orders', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        //'Authorization': 'Bearer ' + store.get('jwt')
+      }//,
+      // timeout: 2000
+    })
+
     const orders = await resp.json()
 
     if (resp.status > 201) {
@@ -178,6 +178,31 @@ ipcMain.handle('cabins-login', async (event, data) => {
 
 })
 //ipcMain.handle('save-cabin', async (event, data) => console.log(data))
+
+//Radera order
+ipcMain.handle('del-order', async (event, data) => {
+  console.log("Send DELETE request to API: /orders/" + data)
+
+  try {
+    const resp = await fetch(serviceAPI + '/orders/' + data, {
+      //_id: data
+      method: 'DELETE',
+      //  headers: {
+      //    'Content-Type': 'application/json',
+      //'Authorization': 'Bearer ' + store.get('jwt')
+      //  }//,
+      // timeout: 2000
+    })
+    console.log("Booking deleted")
+
+  }
+  catch (error) {
+    console.log("Error: " + error.message)
+  }
+
+
+})
+
 
 
 app.on('window-all-closed', function () {
